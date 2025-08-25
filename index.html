@@ -127,6 +127,22 @@
     <input id="clipInput" type="file" accept="video/*,audio/*" multiple style="display:none" />
     <button id="addClipBtn">Clip hinzufügen</button>
     <button id="previewAllBtn">Alle Vorschau</button>
+    <!-- Auswahl eines globalen Videoeffekts (CSS-Filter/ffmpeg-Filter) -->
+    <label for="filterSelect">Filter:</label>
+    <select id="filterSelect">
+      <option value="none">Kein Filter</option>
+      <option value="grayscale">Schwarz/Weiß</option>
+      <option value="sepia">Sepia</option>
+      <option value="invert">Invertiert</option>
+    </select>
+    <!-- Button und Datei-Eingabe für Hintergrund-Audio -->
+    <input id="audioInput" type="file" accept="audio/*" style="display:none" />
+    <button id="addAudioBtn">Audio hinzufügen</button>
+    <!-- Lautstärkeregler für das Hintergrund-Audio -->
+    <label for="volumeSlider">Lautstärke:</label>
+    <input id="volumeSlider" type="range" min="0" max="1" step="0.1" value="1" />
+    <!-- Export-Button für das Zusammenfügen aller Clips zu einer Datei -->
+    <button id="exportBtn">Exportieren</button>
     <div id="apiKeyDiv">
       <label for="apiKey">OpenAI API-Key:</label>
       <input type="password" id="apiKey" placeholder="API-Key eingeben" />
@@ -147,6 +163,18 @@
       </div>
     </div>
   </div>
+  <!-- Drehbucherstellung -->
+  <div id="script-section" style="padding: 10px; background: #f9fafb; border-top: 1px solid #e5e7eb;">
+    <h2>Drehbuch erstellen</h2>
+    <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-bottom:5px;">
+      <input id="songTitle" type="text" placeholder="Musiktitel eingeben" style="flex:2; padding:5px;" />
+      <button id="generateScriptBtn" style="flex:1;">Drehbuch generieren</button>
+      <button id="downloadScriptBtn" style="flex:1; display:none;">Script herunterladen</button>
+    </div>
+    <textarea id="scriptOutput" rows="6" readonly style="width:100%; resize:vertical;"></textarea>
+  </div>
+  <!-- FFMPEG.js für Videoexport (WebAssembly) -->
+  <script src="https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.1/dist/ffmpeg.min.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
