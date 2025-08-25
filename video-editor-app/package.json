@@ -1,0 +1,13 @@
+{
+  "name": "music-video-editor",
+  "version": "0.1.0",
+  "description": "A cross‑platform music video editor with ChatGPT integration",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "dependencies": {
+    "electron": "^26.2.1",
+    "openai": "^3.2.1"
+  }
+}
