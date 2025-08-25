@@ -141,6 +141,12 @@
     <!-- Lautstärkeregler für das Hintergrund-Audio -->
     <label for="volumeSlider">Lautstärke:</label>
     <input id="volumeSlider" type="range" min="0" max="1" step="0.1" value="1" />
+    <!-- Übergänge zwischen Clips -->
+    <label for="transitionSelect">Übergang:</label>
+    <select id="transitionSelect">
+      <option value="none">Keiner</option>
+      <option value="fade">Fade (Ein-/Ausblenden)</option>
+    </select>
     <!-- Export-Button für das Zusammenfügen aller Clips zu einer Datei -->
     <button id="exportBtn">Exportieren</button>
     <div id="apiKeyDiv">
@@ -172,6 +178,22 @@
       <button id="downloadScriptBtn" style="flex:1; display:none;">Script herunterladen</button>
     </div>
     <textarea id="scriptOutput" rows="6" readonly style="width:100%; resize:vertical;"></textarea>
+
+    <!-- Button zur automatischen Videosuche für jede Szene -->
+    <div style="margin-top: 10px; display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
+      <button id="generateClipsBtn" style="flex:1;">Clips für Szenen suchen</button>
+    </div>
+  </div>
+
+  <!-- Abschnitt für Video-Suche und Vorschläge -->
+  <div id="video-search-section" style="padding: 10px; background: #f9fafb; border-top: 1px solid #e5e7eb;">
+    <h2>Video-Vorschläge</h2>
+    <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-bottom:5px;">
+      <input id="videoSearchInput" type="text" placeholder="Suchbegriff für Video…" style="flex:2; padding:5px;" />
+      <button id="searchVideoBtn" style="flex:1;">Video suchen</button>
+    </div>
+    <!-- Container für die Suchergebnisse -->
+    <div id="videoResults" style="display:flex; flex-wrap:wrap; gap:10px;"></div>
   </div>
   <!-- FFMPEG.js für Videoexport (WebAssembly) -->
   <script src="https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.1/dist/ffmpeg.min.js"></script>
