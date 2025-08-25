@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Online Musik Video Editor</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+    header {
+      background-color: #1f2937;
+      color: white;
+      padding: 10px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+    #controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px;
+      background-color: #f3f4f6;
+      flex-shrink: 0;
+    }
+    #content {
+      flex: 1;
+      display: flex;
+      overflow: hidden;
+    }
+    #video-preview {
+      flex: 2;
+      background: #111827;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    #video-preview video {
+      max-width: 100%;
+      max-height: 100%;
+      background: black;
+    }
+    #chat {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      border-left: 1px solid #e5e7eb;
+    }
+    #chat-log {
+      flex: 1;
+      overflow-y: auto;
+      padding: 10px;
+      background: #f9fafb;
+    }
+    #chat-input {
+      padding: 10px;
+      border-top: 1px solid #e5e7eb;
+      display: flex;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+    #chat-input textarea {
+      flex: 1;
+      height: 60px;
+      resize: none;
+      padding: 5px;
+    }
+    #chat-input button {
+      padding: 10px 20px;
+    }
+    #apiKeyDiv {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .message {
+      margin-bottom: 10px;
+    }
+    .message strong {
+      display: block;
+    }
+
+    /* Zeitleiste für Clips */
+    #timeline {
+      padding: 10px;
+      background: #f3f4f6;
+      overflow-x: auto;
+      border-bottom: 1px solid #e5e7eb;
+      flex-shrink: 0;
+    }
+    .timeline-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 6px;
+      background: #ffffff;
+      border: 1px solid #d1d5db;
+      padding: 4px;
+      border-radius: 4px;
+    }
+    .timeline-item span.name {
+      flex: 1;
+    }
+    .timeline-item input[type=number] {
+      width: 60px;
+      margin-left: 4px;
+    }
+    .timeline-item button {
+      margin-left: 4px;
+      padding: 2px 6px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Online Musik Video Editor</h1>
+  </header>
+  <div id="controls">
+    <input id="fileInput" type="file" accept="video/*,audio/*" />
+    <!-- verstecktes Eingabefeld für Clips -->
+    <!-- ermöglicht das Auswählen mehrerer Clips auf einmal -->
+    <input id="clipInput" type="file" accept="video/*,audio/*" multiple style="display:none" />
+    <button id="addClipBtn">Clip hinzufügen</button>
+    <button id="previewAllBtn">Alle Vorschau</button>
+    <!-- Auswahl eines globalen Videoeffekts (CSS-Filter/ffmpeg-Filter) -->
+    <label for="filterSelect">Filter:</label>
+    <select id="filterSelect">
+      <option value="none">Kein Filter</option>
+      <option value="grayscale">Schwarz/Weiß</option>
+      <option value="sepia">Sepia</option>
+      <option value="invert">Invertiert</option>
+    </select>
+    <!-- Button und Datei-Eingabe für Hintergrund-Audio -->
+    <input id="audioInput" type="file" accept="audio/*" style="display:none" />
+    <button id="addAudioBtn">Audio hinzufügen</button>
+    <!-- Lautstärkeregler für das Hintergrund-Audio -->
+    <label for="volumeSlider">Lautstärke:</label>
+    <input id="volumeSlider" type="range" min="0" max="1" step="0.1" value="1" />
+    <!-- Export-Button für das Zusammenfügen aller Clips zu einer Datei -->
+    <button id="exportBtn">Exportieren</button>
+    <div id="apiKeyDiv">
+      <label for="apiKey">OpenAI API-Key:</label>
+      <input type="password" id="apiKey" placeholder="API-Key eingeben" />
+      <button id="saveKeyBtn">Speichern</button>
+    </div>
+  </div>
+  <!-- Zeitleiste für Clips -->
+  <div id="timeline"></div>
+  <div id="content">
+    <div id="video-preview">
+      <video id="videoPlayer" controls></video>
+    </div>
+    <div id="chat">
+      <div id="chat-log"></div>
+      <div id="chat-input">
+        <textarea id="promptInput" placeholder="Frage an ChatGPT..."></textarea>
+        <button id="sendPromptBtn">Senden</button>
+      </div>
+    </div>
+  </div>
+  <!-- Drehbucherstellung -->
+  <div id="script-section" style="padding: 10px; background: #f9fafb; border-top: 1px solid #e5e7eb;">
+    <h2>Drehbuch erstellen</h2>
+    <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-bottom:5px;">
+      <input id="songTitle" type="text" placeholder="Musiktitel eingeben" style="flex:2; padding:5px;" />
+      <button id="generateScriptBtn" style="flex:1;">Drehbuch generieren</button>
+      <button id="downloadScriptBtn" style="flex:1; display:none;">Script herunterladen</button>
+    </div>
+    <textarea id="scriptOutput" rows="6" readonly style="width:100%; resize:vertical;"></textarea>
+  </div>
+  <!-- FFMPEG.js für Videoexport (WebAssembly) -->
+  <script src="https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.1/dist/ffmpeg.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
