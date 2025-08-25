@@ -1,6 +1,6 @@
 # Musik Video Editor
 
-Dies ist ein erster Prototyp für eine plattformübergreifende Anwendung zur Erstellung von Musikvideos mit ChatGPT‑Unterstützung. Die App basiert auf Electron und verwendet HTML/CSS/JavaScript für die Oberfläche.
+Dies ist ein erster Prototyp für eine plattformübergreifende Anwendung zur Erstellung von Musikvideos mit ChatGPT‑Unterstützung. Die App basiert auf Electron und verwendet HTML/CSS/JavaScript für die Oberfläche. Funktion der Desktop‑ und Web‑Version, Anweisungen zur Installation und Nutzung, Hinweise zu ChatGPT‑Integration, etc.
 
 ## Funktionen
 
